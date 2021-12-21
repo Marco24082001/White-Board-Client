@@ -170,7 +170,6 @@ function Control({onColorUpdate, onSizeUpdate, onToolUpdate, download, refresh, 
     }
 
     const updateRoleRef = async () => {
-        console.log(roomId);
         apiParticipations.get(`/isParticipant/${roomId}`, {
             headers: {accessToken: localStorage.getItem('accessToken')},
             })
@@ -383,45 +382,32 @@ function Control({onColorUpdate, onSizeUpdate, onToolUpdate, download, refresh, 
 
         // get list adminId of board
         // check can you participate this room
-        // apiRoom.get(`/${roomId}`,{ 
-        //     headers: { accessToken: localStorage.getItem('accessToken')},
-        //   })
-        //   .then((res) => {
-        //     if(res.data.id !== null){
-        //         roomId = res.data.id;
-        //         apiParticipations.get(`/isParticipant/${roomId}`, {
-        //         headers: {accessToken: localStorage.getItem('accessToken')},
-        //         })
-        //         .then((res) => {
+        apiRoom.get(`/${roomId}`,{ 
+            headers: { accessToken: localStorage.getItem('accessToken')},
+          })
+          .then((res) => {
+            console.log('thanhvi')
+            if(res.data !== null){
+                console.log('thanvsd')
+                apiParticipations.get(`/isParticipant/${roomId}`, {
+                headers: {accessToken: localStorage.getItem('accessToken')},
+                })
+                .then((res) => {
                     
-        //             roleId.current = res.data.role_id;
+                    roleId.current = res.data.role_id;
                     
-        //             if(roleId.current === 5) { // kicked: 5
-        //                 redirectBlock();
-        //             }
-        //             else {
-        //                 joinRoom();
-        //             }
-        //         })
-        //     }
-        //   })
-        apiParticipations.get(`/isParticipant/${roomId}`, {
-        headers: {accessToken: localStorage.getItem('accessToken')},
-        })
-        .then((res) => {
-            console.log('thanh vi');
-            roleId.current = res.data.role_id;
-            
-            if(roleId.current === 5) { // kicked: 5
-                redirectBlock();
+                    if(roleId.current === 5) { // kicked: 5
+                        redirectBlock();
+                    }
+                    else {
+                        joinRoom();
+                    }
+                })
+            }else {
+                history.push('/*');
             }
-            else {
-                joinRoom();
-            }
-        })
+          })
 
-        // on socket 
-        // get listOfUsers
         authState.socket.on('listOfUsers', listOfUsers => { 
             setListOfUsers(listOfUsers);
         });

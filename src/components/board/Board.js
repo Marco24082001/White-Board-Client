@@ -44,7 +44,6 @@ const Board = (props) => {
   const status = useRef(true);
   const boardId = useRef(null);
   const index = useRef(-1);
-  const isdrag = useRef(false);
   const [boardid, setBoardid] = useState(null);
   
   const diffToast = (msg) => {
