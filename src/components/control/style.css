@@ -1,0 +1,623 @@
+#controls {
+    padding: 5px;
+    border: 1px solid black;
+    background-color: #333333;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+/* css tools */
+
+#tools {
+    position: absolute;
+    /* background-color: #333333; */
+    top: 42px;
+    left: 0;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    z-index: 4;
+    
+    /* position: absolute; */
+}
+
+.tool_button {
+    width: 32px; height: 32px;
+    padding: 2px;
+    outline: none;
+    margin: 5px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    background-color : #333333;
+    text-align: center;
+    cursor: pointer;
+}
+
+#text {
+    color: white;
+    font-size: 23px;
+    line-height: 23px;
+}
+
+.tool_button svg {
+    fill: white;
+    vertical-align: middle;
+}
+
+.tool_button.selected {
+    background: black;
+    box-shadow: 0 0 5px #33ffff,
+                0 0 5px #33ffff;
+}
+
+.tool_button:hover {
+    background-color: gray;
+}
+
+.tool_button:disabled:hover {
+    border-color: white;
+}
+
+#colourfield {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    width: 30px;
+    height: 34px;
+    border: none;
+    cursor: pointer;
+}
+
+#colourfield::-webkit-color-swatch {
+    border-radius: 50%;
+    border: 4px solid #000000;
+    display: inline;
+}
+
+#colourfield::-moz-color-swatch{
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+
+#colours {
+    top: 0; left: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.colour_button {
+    width: 30px;
+    height: 30px;
+    border: 3px solid white;
+    display: inline;
+    border-radius: 50%;
+}
+
+.colour_button#crimson {
+    background-color: crimson;
+}
+
+.colour_button.selected#crimson {
+    border-color: crimson;
+}
+
+.colour_button#orange {
+    background-color: orange;
+}
+
+.colour_button.selected#orange {
+    border-color: orange;
+}
+
+.colour_button#yellow {
+    background-color: yellow;
+}
+
+.colour_button.selected#yellow {
+    border-color: yellow;
+}
+
+.colour_button#springgreen {
+    background-color: springgreen;
+}
+
+.colour_button.selected#springgreen {
+    border-color: springgreen;
+}
+
+.colour_button#forestgreen {
+    background-color: forestgreen;
+}
+
+.colour_button.selected#forestgreen {
+    border-color: forestgreen;
+}
+
+.colour_button#dodgerblue {
+    background-color: dodgerblue;
+}
+
+.colour_button.selected#dodgerblue {
+    border-color: dodgerblue;
+}
+
+.colour_button#midnightblue {
+    background-color: midnightblue;
+}
+
+.colour_button.selected#midnightblue {
+    border-color: midnightblue;
+}
+
+.colour_button#mediumslateblue {
+    background-color: mediumslateblue;
+}
+
+.colour_button.selected#mediumslateblue {
+    border-color: mediumslateblue;
+}
+
+.colour_button#black {
+    background-color: black;
+}
+
+.colour_button.selected#black {
+    border-color: black;
+}
+
+.color-container{
+    background-color: #333333;
+    position: absolute;
+    right: 0px;
+    top: 42px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: 0.5s ease-in;
+    z-index: 4;
+}
+
+.color-container.active {
+    transform: translateX(90%);
+}
+
+.slide-color{
+    position: absolute;
+    left:0px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transform: rotate(180deg);
+}
+
+.slide-color:hover{
+    color: cyan;
+}
+
+.slide-color.active {
+    transform: none;
+}
+
+#size input {
+    position: absolute;
+    -webkit-appearance: none;
+    outline: none;
+    width: 100px;
+    height: 15px;
+    background-color: rgb(0, 0, 0);
+    outline: none;
+    border-radius: 7px;
+    color: white;
+    transform: translate(-29px, 50px) rotate(-90deg) ;
+    cursor: pointer;
+}
+
+#size input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: cyan;
+    cursor: pointer;
+    color: white;
+    border-radius: 15px;
+}
+
+.slider::-moz-range-thumb {
+    height: 20px;
+    color: cyan;
+    width: 20px;
+    border-radius: 4px solid #3498db;
+}
+
+/* .slider::-webkit-slider-runnable-track {
+    background: red;
+    border-radius: 20px;
+    color:white;
+} */
+
+
+/* css services */
+
+#services {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #140909;
+    box-sizing: border-box;
+    z-index: 7;
+    position: fixed;
+    width: 100%;
+    /* font-family:Helvetica, sans-serif; */
+  }
+  
+  #services:after {
+    content: '';
+    clear: both;
+    display: table;
+  }
+  
+  #services ul {
+    float: left;
+    list-style: none;
+    margin-right: 40px;
+    position: relative; 
+  }
+
+  
+  
+  #services ul li a {
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 2.5rem;
+    font-size: 0.9rem;
+    padding: 3px 4px
+  }
+  
+  #services ul li a:hover {
+    color: cyan;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #33ffff,
+                0 0 5px #33ffff;
+  }
+  
+  #services ul ul {
+    position: absolute;
+    top: 20px;
+    border-top: 1px solid cyan;
+    opacity: 0;
+    visibility: hidden;
+    transition: top .3s;
+  }
+  
+  #services ul ul ul {
+    border-top: none;
+  }
+  #services ul li:hover > ul {
+    top: 2rem;
+    opacity: 1;
+    visibility: visible;
+    /* width: 200px; */
+  }
+  #services ul ul li a:hover{
+    color: cyan;
+    box-shadow: none;
+  }
+  
+  #services ul ul li{
+    position: relative;
+    margin: 0px;
+    /* width:; */
+    float: none;
+    display: list-item;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+  }
+  
+  #services ul ul li a {
+    line-height: 2rem;
+    font-size: 0.7rem;
+  }
+  
+  #services ul ul ul li {
+    position: relative;
+    /* top: -70px; */
+    top: -2rem;
+    left: 3rem;
+    
+  }
+
+  #services ul ul ul li a {
+    font-size: 0.7rem;
+  }
+
+
+.share-button{
+    display:inline-block;
+    float: right;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 2.4rem;
+    margin-right: 30px;
+    cursor: pointer;
+    padding: 3px 4px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.share-button:hover{
+    color: cyan;
+    box-shadow: none;
+    box-shadow: 0 0 5px #33ffff,
+                0 0 5px #33ffff;
+}
+
+.share-button::after{
+    content: "Copied";
+    position: absolute;
+    bottom: -3.2rem;
+
+    color: white;
+    padding: 1px 4px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    right:0;
+    background-color: #1b1b1b;
+    display: none;
+}
+
+.share-button::before{
+    content: "";
+    position: absolute;
+    bottom: -1rem;
+    right:0px;
+    width:10px;
+    height: 10px;
+    right: 25px;
+    background: #1b1b1b;
+    transform: rotate(45deg);
+    display: none;
+}
+
+.share-button.active::before, 
+.share-button.active::after {
+    display: block;
+}
+
+.cursor {
+    background:transparent;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    position: fixed;
+    left: 200px;
+    top: 200px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#services #listboxuser {
+    float: right;
+    list-style: none;
+    margin-right: 10px;
+  }
+
+  #services #listboxuser img{
+      width: 30px;
+  }
+
+  #services #listboxuser li{
+    color: white;
+    height: 40px;
+    cursor: pointer;
+    text-decoration: none;
+    margin : 2px 5px;
+    line-height: 2rem;
+    font-size: 0.9rem;
+    padding: 3px 4px;
+    border: 1px solid #33ffff;
+    position: relative;
+    align-items: center;
+    display:flex;
+    justify-content:space-evenly;
+    gap: 5px;
+  }
+  
+  #services ul li {
+    float: left;
+    display: inline-block;
+    background: #1b1b1b;
+    margin: 0 5px;  
+  }
+
+#listboxuser li .control-user {
+    position: absolute;
+    top: 39px;
+    /* left: 20px; */
+    width: 200px;
+    background: white;
+    color: black;
+    /* padding: 20px 20px; */
+    border-radius: 5px;
+    right: 0px;
+    /* transform: translateX(-100%); */
+    border: 1.5px solid #000000;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    display: none;
+}
+
+.control-user button {
+    text-decoration: none;
+    border: none;
+    padding: 3px 0;
+    cursor: pointer;
+    background-color:white;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    padding-left: 30px;
+}
+
+.control-user .kick-btn span {
+    vertical-align: middle;
+    line-height: 10px;
+    color: red !important;
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.control-user .setAdmin-btn span {
+    vertical-align: middle;
+    line-height: 10px;
+    color: #3498db !important;
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.control-user .setEditor-btn span {
+    vertical-align: middle;
+    line-height: 10px;
+    color: rgb(2, 2, 19);
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.control-user .setOnlysee-btn span {
+    vertical-align: middle;
+    line-height: 10px;
+    color: rgb(2, 2, 19);
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.control-user .cancelAdmin-btn span {
+    vertical-align: middle;
+    line-height: 10px;
+    color: rgb(194, 32, 243);
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.control-user .guild {
+    font-size: 0.8rem;
+}
+
+.control-user .guild span {
+    color: #3498db;
+    font-size: 1.2rem;
+    vertical-align: middle;
+    line-height: 14px;
+    margin-right: 4px;
+}
+
+.control-user .name {
+    padding: 5px 0;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+.control-user .name span {
+    margin-left: 5px;
+    font-size: 0.6rem;
+    color:#333333
+}
+
+.control-user button:hover {
+   color: red;
+   background-color: rgb(218, 212, 218);
+   /* border: 1px solid rgb(218, 212, 218); */
+}
+
+.control-user .setEditor-btn:hover {
+    color: #3498db;
+ }
+
+ .control-user .setAdmin-btn:hover {
+    color: #3498db;
+ }
+
+ .control-user .cancelAdmin-btn:hover {
+     color: rgb(194, 32, 243);
+ }
+
+ .control-user .setOnlysee-btn:hover {
+    color: black;
+ }
+
+#listboxuser li:hover .control-user {
+    display: block;
+}
+
+.user-name {
+    line-height: 1.6rem;
+    font-size: 0.8rem;
+}
+
+.ctl-listboard {
+    position: absolute;
+    /* width: 30px; */
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    left: 0;
+    bottom: 0;
+    z-index: 8;
+    /* width: 100px; */
+    /* height: 100px; */
+    background-color:rgb(51, 42, 42);
+    align-items: center;
+    gap: 5px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.ctl-listboard::-webkit-scrollbar {
+    display: none;
+}
+.ctl-listboard
+.btn-ctl {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    text-align: center;
+    font-size: 25px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.btn-ctl.switch-board {
+    font-size: 20px !important;
+    line-height: 30px;
+}
+
+.btn-ctl.switch-board.selected {
+    background-color :rgb(161, 156, 156)
+}
+
+.btn-ctl.deleteboard {
+    font-size: 22px;
+    line-height: 27px;
+}
+.btn-ctl.deleteboard span svg {
+    fill: rgb(255, 7, 7);
+    vertical-align:middle;
+}
+.btn-ctl span svg {
+    fill:rgb(56, 1, 255);
+    vertical-align:middle;
+}
+
+.btn-ctl:hover {
+    background-color: rgb(161, 156, 156);
+}
+
