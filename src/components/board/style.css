@@ -1,158 +1,175 @@
 * {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
+}
+
+.board {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  /* background-color: white; */
+  background:
+      linear-gradient(-90deg, rgba(0,0,0,.05) 1px, transparent 1px),
+      linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), 
+      linear-gradient(-90deg, rgba(0, 0, 0, .04) 1px, transparent 1px),
+      linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+      linear-gradient(transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+      linear-gradient(-90deg, #aaa 1px, transparent 1px),
+      linear-gradient(-90deg, transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+      linear-gradient(#aaa 1px, transparent 1px),
+      #f2f2f2;
+  background-size:
+      4px 4px,
+      4px 4px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px;
+}
+.spreadboard {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: transparent;
+  /* cursor: move; */
+  cursor: none;
+}
+
+.item {
+  /* width: 100px;
+  height: 100px; */
+  position: absolute;
+  /* background-position:center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 2;
+  border: dotted 3px cyan;
+  cursor: move;
+  display: none;
+}
+
+.resizer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.resizer.nw {
+  top: -4px;
+  left: -4px;
+  cursor: nw-resize;
+}
+.resizer.ne{
+  top: -4px;
+  right: -4px;
+  cursor: ne-resize;
+}
+.resizer.sw{
+  bottom: -4px;
+  left: -4px;
+  cursor: sw-resize;
+}
+.resizer.se{
+  bottom: -4px;
+  right: -4px;
+  cursor: se-resize;
+}
+
+.tool_drag {
+  position: absolute;
+  display: flex;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
   
-  .board {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    /* background-color: white; */
-    
-  }
-  .spreadboard {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    background-color: transparent;
-    /* cursor: move; */
-    cursor: none;
-  }
-
-  .item {
-    /* width: 100px;
-    height: 100px; */
-    position: absolute;
-    /* background-position:center; */
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 2;
-    border: dotted 3px cyan;
-    cursor: move;
-    display: none;
-  }
+  flex-direction: row;
+  justify-content:space-evenly;
+  gap: 1px;
+  bottom: 0px;
   
-  .resizer {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: black;
-    z-index: 2;
-    border-radius: 50%;
-  }
+  z-index: 3;
+  align-items: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.tool_drag span {
+  display: block;
+  background-color: black;
+  /* font-size: 18px; */
+  color:white;
+  padding: 1px;
+  font-size: 23px;
+}
+
+.tool_drag span svg {
+  vertical-align: middle;
+}
+
+.tool_drag span:hover {
+  background-color: rgb(54, 48, 48);
+}
+
+.text-container {
+  display:none;
+  position: absolute;
+  /* left: 50%; */
+  /* top:50%; */
+  z-index: 3;
+  /* width: 100px;
+  background-color: rebeccapurple;
+  height: 20px; */
+  height: 25px;
+}
+
+#textbox {
+  position:absolute;
+  font-family: Comic;
+  font-size: 15px;
+  padding: 2px;
+}
+
+.tool_text {
+  position: absolute;
+  display: flex;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  flex-direction: row;
+  justify-content:space-evenly;
+  gap: 1px;
+  bottom: 0px;
   
-  .resizer.nw {
-    top: -4px;
-    left: -4px;
-    cursor: nw-resize;
-  }
-  .resizer.ne{
-    top: -4px;
-    right: -4px;
-    cursor: ne-resize;
-  }
-  .resizer.sw{
-    bottom: -4px;
-    left: -4px;
-    cursor: sw-resize;
-  }
-  .resizer.se{
-    bottom: -4px;
-    right: -4px;
-    cursor: se-resize;
-  }
+  z-index: 3;
+  align-items: center;
+  padding: 2px;
+  cursor: pointer;
+}
 
-  .tool_drag {
-    position: absolute;
-    display: flex;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-    
-    flex-direction: row;
-    justify-content:space-evenly;
-    gap: 1px;
-    bottom: 0px;
-    
-    z-index: 3;
-    align-items: center;
-    padding: 2px;
-    cursor: pointer;
-  }
+.tool_text span {
+  display: block;
+  background-color: black;
+  /* font-size: 18px; */
+  color:white;
+  padding: 1px;
+  font-size: 15px;
+}
 
-  .tool_drag span {
-    display: block;
-    background-color: black;
-    /* font-size: 18px; */
-    color:white;
-    padding: 1px;
-    font-size: 23px;
-  }
+.tool_text span svg {
+  vertical-align: middle;
+}
 
-  .tool_drag span svg {
-    vertical-align: middle;
-  }
+.tool_text span:hover {
+  background-color: rgb(54, 48, 48);
+}
 
-  .tool_drag span:hover {
-    background-color: rgb(54, 48, 48);
-  }
-
-  .text-container {
-    display:none;
-    position: absolute;
-    /* left: 50%; */
-    /* top:50%; */
-    z-index: 3;
-    /* width: 100px;
-    background-color: rebeccapurple;
-    height: 20px; */
-    height: 25px;
-  }
-
-  #textbox {
-    position:absolute;
-    font-family: Comic;
-    font-size: 15px;
-    padding: 2px;
-  }
-
-  .tool_text {
-    position: absolute;
-    display: flex;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-    flex-direction: row;
-    justify-content:space-evenly;
-    gap: 1px;
-    bottom: 0px;
-    
-    z-index: 3;
-    align-items: center;
-    padding: 2px;
-    cursor: pointer;
-  }
-
-  .tool_text span {
-    display: block;
-    background-color: black;
-    /* font-size: 18px; */
-    color:white;
-    padding: 1px;
-    font-size: 15px;
-  }
-
-  .tool_text span svg {
-    vertical-align: middle;
-  }
-
-  .tool_text span:hover {
-    background-color: rgb(54, 48, 48);
-  }
-
-  
