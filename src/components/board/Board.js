@@ -63,6 +63,17 @@ const Board = (props) => {
         }, 0);
   }
 
+  const emitEraser = (data) => {
+    if(timeout.current !== undefined) clearTimeout(timeout.current);
+        timeout.current = setTimeout(() => {
+          let base64ImageData = canvasRef.current.toDataURL("image/png");
+          let roomId = room.current;
+          // previousBoard.current.push(base64ImageData)
+          authState.socket.emit("eraser-data", {roomId, boardid, data});
+          updateBoard(base64ImageData);
+        }, 0);
+  }
+
   const emitUndoCanvas = () => {
     if(timeout.current !== undefined) clearTimeout(timeout.current);
         timeout.current = setTimeout(() => {
@@ -473,7 +484,7 @@ const Board = (props) => {
             setBoardid(listOfBoards[idx].id);
             resetListOfBoards();
             const roomId = room.current;
-            authState.socket.emit("refresh", {roomId, boardid});
+            authState.socket.emit("changeListOfBoards", {roomId, boardid});
           }
         })
       }
@@ -492,6 +503,10 @@ const Board = (props) => {
       if(!res.data.error) {
         if(res.data.length !== 0){
           setListOfBoards(res.data);
+        }
+        if(res.data.length === 1) {
+          boardId.current = res.data[0].id;
+          setBoardid(res.data[0].id)
         }
       }
       else {
@@ -587,36 +602,61 @@ const Board = (props) => {
           'eraser': {
             draw: (data) => {
 
+              // ctx.beginPath();
+              // ctx.save();
+              // ctx.arc(data.x1, data.y1, data.size/2, 0, 2 * Math.PI, false);
+              // ctx.clip();
+              // ctx.clearRect(data.x1 - data.size/2 - 1, data.y1 - data.size/2 - 1,
+              //   data.size + 2, data.size + 2);
+              // ctx.restore();
+              // // ctx.restore();
+              // // spreadctx.closePath();
+              // // spreadctx.beginPath();
+              // // spreadctx.moveTo(data.x0, data.y0);
+              // // spreadctx.lineTo(data.x1, data.y1);
+              // // spreadctx.strokeStyle = '#ffffff';
+              // // spreadctx.lineWidth = data.size;
+              // // spreadctx.lineCap = "round";
+              // // spreadctx.lineJoin = "round";
+              // // spreadctx.stroke();
+              // // spreadctx.closePath();
+
+              // if(!drawing) {
+              //   let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
+              //   let image = new Image();
+              //   image.onload = function(){
+              //     ctx.drawImage(image, 0, 0);
+              //   };
+              //   image.src = base64ImageData;
+              //   spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
+              //   if (!data.emit) { return; }
+              //   emitCanvas();
+              // }
               ctx.beginPath();
               ctx.save();
-              ctx.arc(data.x1, data.y1, data.size/2, 0, 2 * Math.PI, false);
-              ctx.clip();
-              ctx.clearRect(data.x1 - data.size/2 - 1, data.y1 - data.size/2 - 1,
-                data.size + 2, data.size + 2);
+              ctx.moveTo(data.x0, data.y0);
+              ctx.lineTo(data.x1, data.y1);
+              ctx.globalCompositeOperation = 'destination-out';
+              ctx.lineWidth = data.size;
+              ctx.lineCap = "round";
+              ctx.lineJoin = "round";
+              ctx.stroke();
+              ctx.closePath();
               ctx.restore();
-              // ctx.restore();
-              // spreadctx.closePath();
-              // spreadctx.beginPath();
-              // spreadctx.moveTo(data.x0, data.y0);
-              // spreadctx.lineTo(data.x1, data.y1);
-              // spreadctx.strokeStyle = '#ffffff';
-              // spreadctx.lineWidth = data.size;
-              // spreadctx.lineCap = "round";
-              // spreadctx.lineJoin = "round";
-              // spreadctx.stroke();
-              // spreadctx.closePath();
-
-              if(!drawing) {
-                let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
-                let image = new Image();
-                image.onload = function(){
-                  ctx.drawImage(image, 0, 0);
-                };
-                image.src = base64ImageData;
-                spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
-                if (!data.emit) { return; }
-                emitCanvas();
-              }
+              if (!data.emit) { return; }
+              emitEraser(data);
+              // if(!drawing) {
+              //   let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
+              //   let image = new Image();
+              //   image.onload = function(){
+              //     ctx.drawImage(image, 0, 0);
+              //   };
+              //   image.src = base64ImageData;
+              //   spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
+                
+              //   if (!data.emit) { return; }
+              //   emitCanvas();
+              // }              
               
             } 
           },
@@ -946,6 +986,22 @@ const Board = (props) => {
       }
     }
 
+    const onEraser = (data) => {
+      if(boardId.current === data.boardid){
+        ctx.beginPath();
+        ctx.save();
+        ctx.moveTo(data.data.x0, data.data.y0);
+        ctx.lineTo(data.data.x1, data.data.y1);
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineWidth = data.data.size;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+        ctx.closePath();
+        ctx.restore();
+      }
+    }
+
     authState.socket.on('canvas-data', (data) => {
       if(boardId.current === data.boardid){
         onDrawingEvent(data.base64ImageData);
@@ -958,11 +1014,12 @@ const Board = (props) => {
         updateRoleRef();
       });
       authState.socket.on('changeListOfBoards', resetListOfBoards);
+      authState.socket.on('eraser-data', onEraser);
   }, [])
 
   return (
     
-    <div id="whiteboard-container">
+    <div id='whiteboard-container'>
       <div className='text-container'>
         <input type='text' id= 'textbox' placeholder= 'Enter text'/>
         <div className='tool_text'>
