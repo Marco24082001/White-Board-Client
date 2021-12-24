@@ -15,6 +15,7 @@ function Navbar() {
   const [username, setUsername] = useState('');
   const [image, setImage] = useState('');
   const [url, setUrl] = useState('');
+  const usernameRef = useRef('');
   const count = useRef(0);
   let history = useHistory();
   const { setAuthState } = useContext(AuthContext);
@@ -118,28 +119,6 @@ function Navbar() {
   }
 
   useEffect(() => {
-    if(url !== '' && username !== '') {
-      console.log('vao roi');
-      const data = {username: username, photo: url};
-      console.log(username);
-      api.put('setting-info/', data, { 
-        headers: { accessToken: localStorage.getItem("accessToken")},
-      })
-      .then(res => {
-        if (res.data.error) diffToast(res.data.error);
-        else {
-          
-          document.getElementById('user_photo').src = url;
-          document.getElementById('photo').src = url;
-          localStorage.setItem('accessToken', res.data); 
-        }
-      })
-      .catch(err => diffToast(err));      
-    }
-    count.current++;
-  },[url]);
-
-  useEffect(() => {
     console.log("effect")
     api.get('auth', {
       headers: {accessToken: localStorage.getItem('accessToken')}
@@ -159,6 +138,30 @@ function Navbar() {
       }
     })
   },[]);
+
+  useEffect(() => {
+    if(url !== '') {
+      console.log('vao roi');
+      const data = {username: usernameRef.current, photo: url};
+      console.log(username);
+      api.put('setting-info/', data, { 
+        headers: { accessToken: localStorage.getItem("accessToken")},
+      })
+      .then(res => {
+        if (res.data.error) diffToast(res.data.error);
+        else {
+          
+          document.getElementById('user_photo').src = url;
+          document.getElementById('photo').src = url;
+          localStorage.setItem('accessToken', res.data); 
+        }
+      })
+      .catch(err => diffToast(err));      
+    }
+    count.current++;
+  },[url]);
+
+  
 
   return (
     <>
