@@ -125,6 +125,7 @@ function Navbar() {
       }).then((res) => {
         if(!res.data.error){
           document.getElementById('username').value = res.data.username;
+          usernameRef.current = res.data.username;
           setUsername(res.data.username);
         }
     });
