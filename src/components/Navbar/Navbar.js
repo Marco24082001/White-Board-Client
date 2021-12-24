@@ -141,7 +141,7 @@ function Navbar() {
 
 
   useEffect(() => {
-    if(url !== '') {
+    if(url !== '' && username !== '') {
       console.log('vao roi');
       const data = {username: username, photo: url};
       console.log(username);
