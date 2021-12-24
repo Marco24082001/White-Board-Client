@@ -118,29 +118,6 @@ function Navbar() {
   }
 
   useEffect(() => {
-    console.log("effect")
-    api.get('auth', {
-      headers: {accessToken: localStorage.getItem('accessToken')}
-      }).then((res) => {
-        if(!res.data.error){
-          document.getElementById('username').value = res.data.username;
-          setUsername(res.data.username);
-        }
-    });
-
-    api.get('photo', {
-      headers: { accessToken: localStorage.getItem("accessToken")},
-    }).then(res => {
-      if(res.data.error) diffToast(res.data.error);
-      else {
-        setUrl(res.data.photo);
-      }
-    })
-  },[]);
-
-
-
-  useEffect(() => {
     if(url !== '' && username !== '') {
       console.log('vao roi');
       const data = {username: username, photo: url};
@@ -161,6 +138,27 @@ function Navbar() {
     }
     count.current++;
   },[url]);
+
+  useEffect(() => {
+    console.log("effect")
+    api.get('auth', {
+      headers: {accessToken: localStorage.getItem('accessToken')}
+      }).then((res) => {
+        if(!res.data.error){
+          document.getElementById('username').value = res.data.username;
+          setUsername(res.data.username);
+        }
+    });
+
+    api.get('photo', {
+      headers: { accessToken: localStorage.getItem("accessToken")},
+    }).then(res => {
+      if(res.data.error) diffToast(res.data.error);
+      else {
+        setUrl(res.data.photo);
+      }
+    })
+  },[]);
 
   return (
     <>
