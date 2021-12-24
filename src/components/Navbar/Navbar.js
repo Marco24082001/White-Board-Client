@@ -72,7 +72,6 @@ function Navbar() {
   }
 
   const settingInfo = () => {
-    console.log('sdfsdf');
     if(validateSetting()){
       const user_setting = document.getElementById('user-setting');
       if(image !== ''){
@@ -123,7 +122,6 @@ function Navbar() {
     api.get('auth', {
       headers: {accessToken: localStorage.getItem('accessToken')}
       }).then((res) => {
-        console.log('sdfsddsfsd')
         if(!res.data.error){
           document.getElementById('username').value = res.data.username;
           setUsername(res.data.username);
@@ -135,7 +133,6 @@ function Navbar() {
     }).then(res => {
       if(res.data.error) diffToast(res.data.error);
       else {
-        console.log(res.data.photo);
         setUrl(res.data.photo);
       }
     })
