@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-// import {useHistory } from "react-router-dom";
+import {useHistory } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
 import {toast} from 'react-toastify';
 import Control from '../control/Control';
@@ -45,6 +45,7 @@ const Board = (props) => {
   const boardId = useRef(null);
   const index = useRef(-1);
   const [boardid, setBoardid] = useState(null);
+  let history = useHistory();
   
   const diffToast = (msg) => {
     toast(msg);
@@ -54,13 +55,13 @@ const Board = (props) => {
   // emit data
   const emitCanvas = () => {
     if(timeout.current !== undefined) clearTimeout(timeout.current);
-        timeout.current = setTimeout(() => {
-          let base64ImageData = canvasRef.current.toDataURL("image/png");
-          let roomId = room.current;
-          previousBoard.current.push(base64ImageData)
-          authState.socket.emit("canvas-data", {roomId, boardid,base64ImageData});
-          updateBoard(base64ImageData);
-        }, 0);
+    timeout.current = setTimeout(() => {
+      let base64ImageData = canvasRef.current.toDataURL("image/png");
+      let roomId = room.current;
+      previousBoard.current.push(base64ImageData)
+      authState.socket.emit("canvas-data", {roomId, boardid,base64ImageData});
+      updateBoard(base64ImageData);
+    }, 0);
   }
 
   const emitEraser = (data) => {
@@ -447,6 +448,11 @@ const Board = (props) => {
         })
   }
 
+  const switchBoard = (id) => {
+    boardId.current = id;
+    setBoardid(id);
+  }
+
   const createBoard = () => {
     if(status.current) {
       const newBoard = {roomId: room.current};
@@ -458,8 +464,7 @@ const Board = (props) => {
         if(res.data.error){
           alert(res.data.error);
         }else{
-          boardId.current = res.data.id;
-          setBoardid(res.data.id);
+          switchBoard(res.data.id);
           resetListOfBoards();
           const roomId = room.current;
           authState.socket.emit("changeListOfBoards", {roomId, boardid});
@@ -481,7 +486,7 @@ const Board = (props) => {
             // boardId.current
             const index = listOfBoards.findIndex(board => board.id === id);
             const idx = index?(index - 1):(index + 1);
-            setBoardid(listOfBoards[idx].id);
+            switchBoard(listOfBoards[idx].id)
             resetListOfBoards();
             const roomId = room.current;
             authState.socket.emit("changeListOfBoards", {roomId, boardid});
@@ -489,11 +494,6 @@ const Board = (props) => {
         })
       }
     }
-  }
-
-  const switchBoard = (id) => {
-    boardId.current = id;
-    setBoardid(id);
   }
 
   const resetListOfBoards = () => {
@@ -505,8 +505,12 @@ const Board = (props) => {
           setListOfBoards(res.data);
         }
         if(res.data.length === 1) {
-          boardId.current = res.data[0].id;
-          setBoardid(res.data[0].id)
+          switchBoard(res.data[0].id);
+          return
+        }
+        const index = res.data.findIndex(board => board.id === boardId.current);
+        if(index === -1) {
+          switchBoard(res.data[0].id);
         }
       }
       else {
@@ -574,7 +578,7 @@ const Board = (props) => {
         const tools = {
     
           'pencil': {
-            draw: (data) => {
+            draw: async (data) => {
               spreadctx.beginPath();
               spreadctx.moveTo(data.x0, data.y0);
               spreadctx.lineTo(data.x1, data.y1);
@@ -584,7 +588,9 @@ const Board = (props) => {
               spreadctx.lineJoin = "round";
               spreadctx.stroke();
               spreadctx.closePath();
-              if(!drawing) {
+              
+              if(timeout.current !== undefined) clearTimeout(timeout.current);
+              timeout.current = setTimeout(() => {
                 let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
                 let image = new Image();
                 image.onload = function(){
@@ -595,43 +601,12 @@ const Board = (props) => {
                 
                 if (!data.emit) { return; }
                 emitCanvas();
-              }              
+              }, 300);        
             } 
           },
     
           'eraser': {
             draw: (data) => {
-
-              // ctx.beginPath();
-              // ctx.save();
-              // ctx.arc(data.x1, data.y1, data.size/2, 0, 2 * Math.PI, false);
-              // ctx.clip();
-              // ctx.clearRect(data.x1 - data.size/2 - 1, data.y1 - data.size/2 - 1,
-              //   data.size + 2, data.size + 2);
-              // ctx.restore();
-              // // ctx.restore();
-              // // spreadctx.closePath();
-              // // spreadctx.beginPath();
-              // // spreadctx.moveTo(data.x0, data.y0);
-              // // spreadctx.lineTo(data.x1, data.y1);
-              // // spreadctx.strokeStyle = '#ffffff';
-              // // spreadctx.lineWidth = data.size;
-              // // spreadctx.lineCap = "round";
-              // // spreadctx.lineJoin = "round";
-              // // spreadctx.stroke();
-              // // spreadctx.closePath();
-
-              // if(!drawing) {
-              //   let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
-              //   let image = new Image();
-              //   image.onload = function(){
-              //     ctx.drawImage(image, 0, 0);
-              //   };
-              //   image.src = base64ImageData;
-              //   spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
-              //   if (!data.emit) { return; }
-              //   emitCanvas();
-              // }
               ctx.beginPath();
               ctx.save();
               ctx.moveTo(data.x0, data.y0);
@@ -645,19 +620,6 @@ const Board = (props) => {
               ctx.restore();
               if (!data.emit) { return; }
               emitEraser(data);
-              // if(!drawing) {
-              //   let base64ImageData = spreadCanvasRef.current.toDataURL("image/png");
-              //   let image = new Image();
-              //   image.onload = function(){
-              //     ctx.drawImage(image, 0, 0);
-              //   };
-              //   image.src = base64ImageData;
-              //   spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
-                
-              //   if (!data.emit) { return; }
-              //   emitCanvas();
-              // }              
-              
             } 
           },
     
@@ -681,7 +643,7 @@ const Board = (props) => {
               spreadctx.lineJoin = "round";
               spreadctx.stroke();
               spreadctx.closePath();
-    
+              
               if(!drawing) {
                 spreadctx.clearRect(0,0,spreadCanvas.width, spreadCanvas.height);
                 ctx.beginPath();
@@ -944,9 +906,6 @@ const Board = (props) => {
     
         // ----------------------- authState.socket.io connection ----------------------------
         const onDrawingEvent = (base64ImageData) => {
-          // const ctx = canvasRef.current.getContext('2d');
-          // ctx.beginPath();
-          // ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
           let image = new Image();
           image.onload = function(){
             ctx.drawImage(image, 0, 0);
@@ -960,7 +919,9 @@ const Board = (props) => {
 
   useEffect(() => {
     const ctx = canvasRef.current.getContext('2d');
+    
     const onDrawingEvent = (base64ImageData) => {
+      
       // ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       let image = new Image();
       image.onload = function(){
@@ -979,7 +940,6 @@ const Board = (props) => {
     }
 
     const onUndoBoard = (data) => {
-      console.log('thanh vi');
       if(boardId.current === data.boardid) {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         onDrawingEvent(data.base64ImageData);
@@ -1007,7 +967,7 @@ const Board = (props) => {
         onDrawingEvent(data.base64ImageData);
         }     
       });
-      authState.socket.on('share-data', emitCanvas);
+      // authState.socket.on('share-data', emitCanvas);
       authState.socket.on('refresh', onRefreshEvent);
       authState.socket.on('undoBoard', onUndoBoard);
       authState.socket.on('roleStatus', (data) => {
@@ -1015,6 +975,9 @@ const Board = (props) => {
       });
       authState.socket.on('changeListOfBoards', resetListOfBoards);
       authState.socket.on('eraser-data', onEraser);
+      authState.socket.on('error', () => {
+        history.push('/overload');
+      })
   }, [])
 
   return (

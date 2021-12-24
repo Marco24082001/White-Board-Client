@@ -83,7 +83,6 @@ function Control({onColorUpdate, onSizeUpdate, onToolUpdate, download, refresh, 
             color_container.classList.add('active');
             e.currentTarget.classList.add('active');
         }
-        console.log(authState.status)
     }
 
     const returnHome = () => {
@@ -386,9 +385,7 @@ function Control({onColorUpdate, onSizeUpdate, onToolUpdate, download, refresh, 
             headers: { accessToken: localStorage.getItem('accessToken')},
           })
           .then((res) => {
-            console.log('thanhvi')
             if(res.data !== null){
-                console.log('thanvsd')
                 apiParticipations.get(`/isParticipant/${roomId}`, {
                 headers: {accessToken: localStorage.getItem('accessToken')},
                 })
@@ -408,6 +405,8 @@ function Control({onColorUpdate, onSizeUpdate, onToolUpdate, download, refresh, 
             }
           })
 
+        // on socket 
+        // get listOfUsers
         authState.socket.on('listOfUsers', listOfUsers => { 
             setListOfUsers(listOfUsers);
         });
