@@ -11,15 +11,12 @@
 
 #tools {
     position: absolute;
-    /* background-color: #333333; */
     top: 42px;
     left: 0;
     width: fit-content;
     display: flex;
     flex-direction: column;
     z-index: 4;
-    
-    /* position: absolute; */
 }
 
 .tool_button {
