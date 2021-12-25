@@ -193,7 +193,7 @@ const Board = (props) => {
   const removeimg = () => {
     const dragImg = document.querySelector('.item');
     dragImg.style.display = 'none';
-    // dragImg.replaceWith(dragImg.cloneNode(true));
+    dragImg.replaceWith(dragImg.cloneNode(true));
   }
 
   const removetxt = () => {

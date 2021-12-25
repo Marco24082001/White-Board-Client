@@ -19,6 +19,7 @@ function Navbar() {
   const count = useRef(0);
   let history = useHistory();
   const { setAuthState } = useContext(AuthContext);
+  
 
   const diffToast = (msg) => {
     toast(msg);
@@ -97,7 +98,6 @@ function Navbar() {
         });
       }
       else {
-        console.log('vao roi');
         const data = {username: username, photo: url};
         console.log(username);
         api.put('setting-info/', data, { 
@@ -119,7 +119,6 @@ function Navbar() {
   }
 
   useEffect(() => {
-    console.log("effect")
     api.get('auth', {
       headers: {accessToken: localStorage.getItem('accessToken')}
       }).then((res) => {
@@ -127,22 +126,22 @@ function Navbar() {
           document.getElementById('username').value = res.data.username;
           usernameRef.current = res.data.username;
           setUsername(res.data.username);
+          setUrl(res.data.photo);
         }
     });
 
-    api.get('photo', {
-      headers: { accessToken: localStorage.getItem("accessToken")},
-    }).then(res => {
-      if(res.data.error) diffToast(res.data.error);
-      else {
-        setUrl(res.data.photo);
-      }
-    })
+    // api.get('photo', {
+    //   headers: { accessToken: localStorage.getItem("accessToken")},
+    // }).then(res => {
+    //   if(res.data.error) diffToast(res.data.error);
+    //   else {
+    //     setUrl(res.data.photo);
+    //   }
+    // })
   },[]);
 
   useEffect(() => {
     if(url !== '') {
-      console.log('vao roi');
       const data = {username: usernameRef.current, photo: url};
       console.log(username);
       api.put('setting-info/', data, { 
